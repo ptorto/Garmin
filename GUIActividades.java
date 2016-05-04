@@ -63,7 +63,7 @@ public class GUIActividades {
         gbc.gridx = 1;
         gbc.weightx = 1;
         
-        this.panel.add(panelActividades, gbc);
+        //this.panel.add(panelActividades, gbc);
         
     }
     
