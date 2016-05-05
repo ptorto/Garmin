@@ -26,7 +26,7 @@ public class Garmin {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException, ParseException {
+    public static void main(String[] args) {
         // TODO code application logic here
         Usuario usuario1 = new Usuario("Pablo", "Masculino", "Torto", "fufo", "pablotortoriello@gmail.com",
                 1.87, 67.5, "20/08/1991");
@@ -35,10 +35,16 @@ public class Garmin {
         usuario1.agregarActividad(actividad);
         usuario1.agregarActividad(actividad2);
 
+        try{
         usuario1.guardar();
+        } catch(Exception e){
+            System.out.println("No se pudo guardar");
+        }
         
         
         GUIPrincipal gui = new GUIPrincipal();
+        
+        
         
         
         /*
