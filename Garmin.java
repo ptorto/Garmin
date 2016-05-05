@@ -28,29 +28,25 @@ public class Garmin {
      */
     public static Usuario usuario;
     public static boolean sesionIniciada = false;
-    
+
     public static void main(String[] args) {
         // TODO code application logic here
         Usuario usuario1 = new Usuario("Pablo", "Masculino", "Torto", "fufo", "pablotortoriello@gmail.com",
                 1.87, 67.5, "20/08/1991");
-       Actividad actividad = new Actividad("correr", new Date(),new Date(), new Date());
-       /*Actividad actividad2 = new Actividad("nadar", new Date(22,8,15),new Date(22,8,15), new Date(22,8,15));
-       usuario1.agregarActividad(actividad);*/
-       usuario1.agregarActividad(actividad);
+        Date fecha = new Date();
+        Actividad actividad = new Actividad("correr", fecha, fecha, fecha);
+        Actividad actividad2 = new Actividad("nadar", new Date(22, 8, 15), new Date(22, 8, 15), new Date(22, 8, 15));
+        usuario1.agregarActividad(actividad);
+        usuario1.agregarActividad(actividad2);
 
-        
-        try{
-        usuario1.guardar();
-        } catch(Exception e){
+        try {
+            usuario1.guardar();
+        } catch (Exception e) {
             System.out.println("No se pudo guardar");
         }
-        
-        
+
         GUIPrincipal gui = new GUIPrincipal();
-        
-        
-        
-        
+
         /*
         ArrayList<String> arreglo = new ArrayList<String>();
 
@@ -113,6 +109,6 @@ public class Garmin {
             act = (Actividad) i;
             System.out.println(act.getDistancia());
         }
-                 */
+         */
     }
 }

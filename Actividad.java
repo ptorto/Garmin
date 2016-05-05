@@ -1,10 +1,19 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package garmin;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Actividad
-{
+/**
+ *
+ * @author Pablo
+ */
+public class Actividad implements Serializable {
     private String tipoActividad;
     private Date fecha;
     private Date horaInicio;
@@ -47,3 +56,4 @@ public class Actividad
 	    System.out.println(medicion);
     }
 }
+

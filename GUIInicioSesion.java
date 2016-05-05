@@ -48,8 +48,8 @@ public class GUIInicioSesion {
             JLabel usuarioL, passwordL;
             usuarioL = new JLabel("Usuario:");
             passwordL = new JLabel("Contraseña:");
-            this.usuarioTF = new JTextField();
-            this.passwordTF = new JTextField();
+            this.usuarioTF = new JTextField("Pablo");
+            this.passwordTF = new JTextField("torto");
             JButton iniciaSesionB = new JButton("Iniciar Sesion");
             iniciaSesionB.addActionListener(new IniciaSesionListener());
             JButton crearCuentaB = new JButton("Crear Cuenta");

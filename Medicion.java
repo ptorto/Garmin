@@ -1,6 +1,8 @@
 package garmin;
 
-public class Medicion
+import java.io.Serializable;
+
+public class Medicion implements Serializable
 {
     private double distancia;
     private double tiempo;
