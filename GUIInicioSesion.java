@@ -53,6 +53,7 @@ public class GUIInicioSesion {
             JButton iniciaSesionB = new JButton("Iniciar Sesion");
             iniciaSesionB.addActionListener(new IniciaSesionListener());
             JButton crearCuentaB = new JButton("Crear Cuenta");
+            crearCuentaB.addActionListener(new CrearCuentaListener());
 
             gbc.gridy = 0;
             gbc.insets = new Insets(50, 100, 0, 100);
@@ -102,6 +103,15 @@ public class GUIInicioSesion {
             Garmin.sesionIniciada = false;
         }
 
+    }
+    
+    class CrearCuentaListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+        }
+        
     }
 
     class IniciaSesionListener implements ActionListener {
