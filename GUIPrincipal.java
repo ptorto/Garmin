@@ -26,7 +26,6 @@ public class GUIPrincipal {
 
     private JFrame frame;
     private JPanel panelPrincipal, panelInfo;
-    private Usuario usuario;
 
     public GUIPrincipal() {
         this.frame = new JFrame("Garmin");
@@ -42,7 +41,6 @@ public class GUIPrincipal {
         GridBagConstraints gbc = new GridBagConstraints();
 
         //gbc.fill = GridBagConstraints.HORIZONTAL;
-
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.2;
@@ -51,7 +49,7 @@ public class GUIPrincipal {
         gbc.ipady = 100;
 
         Dimension size = new Dimension(220, 50);
-        JButton botonInicioSesion = new JButton("Iniciar Sesion");
+        JButton botonInicioSesion = new JButton("Sesion");
         botonInicioSesion.setMinimumSize(size);
         botonInicioSesion.setPreferredSize(size);
         botonInicioSesion.addActionListener(new IniciarSesionListener());
@@ -74,15 +72,16 @@ public class GUIPrincipal {
         panelMenu.add(botonResumen);
         panelMenu.add(botonActividades);
         panelMenu.add(botonLogros);
-        
-        size = new Dimension(500,600);
+
+        size = new Dimension(500, 600);
         this.panelPrincipal.setMinimumSize(size);
         this.panelPrincipal.setPreferredSize(size);
 
         this.panelPrincipal.add(panelMenu, gbc);
 
         panelInfo = new JPanel();
-        panelInfo.setBackground(Color.RED);
+        panelInfo.setBackground(new Color(37, 64, 113));
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 1;
         gbc.weightx = 1;
 
@@ -92,8 +91,6 @@ public class GUIPrincipal {
 
         botonInicioSesion.doClick();
     }
-    
-    
 
     class IniciarSesionListener implements ActionListener {
 
@@ -113,29 +110,32 @@ public class GUIPrincipal {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            GridBagLayout layout = (GridBagLayout) panelPrincipal.getLayout();
-            GridBagConstraints gbc = layout.getConstraints(panelPrincipal.getComponent(1));
-            panelPrincipal.remove(panelPrincipal.getComponent(1));
-            GUIResumen res = new GUIResumen();
-            panelPrincipal.add(res.refresh(), gbc);
-            panelPrincipal.revalidate();
-            panelPrincipal.repaint();
+            if (Garmin.sesionIniciada) {
+                GridBagLayout layout = (GridBagLayout) panelPrincipal.getLayout();
+                GridBagConstraints gbc = layout.getConstraints(panelPrincipal.getComponent(1));
+                panelPrincipal.remove(panelPrincipal.getComponent(1));
+                GUIResumen res = new GUIResumen();
+                panelPrincipal.add(res.refresh(), gbc);
+                panelPrincipal.revalidate();
+                panelPrincipal.repaint();
+            }
         }
 
     }
-    
+
     class ActividadesListener implements ActionListener {
-        
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            GridBagLayout layout = (GridBagLayout) panelPrincipal.getLayout();
-            GridBagConstraints gbc = layout.getConstraints(panelPrincipal.getComponent(1));
-            panelPrincipal.remove(panelPrincipal.getComponent(1));
-            System.out.println("por aca");
-            GUIActividades res = new GUIActividades();
-            panelPrincipal.add(res.refresh(), gbc);
-            panelPrincipal.revalidate();
-            panelPrincipal.repaint();
+            if (Garmin.sesionIniciada) {
+                GridBagLayout layout = (GridBagLayout) panelPrincipal.getLayout();
+                GridBagConstraints gbc = layout.getConstraints(panelPrincipal.getComponent(1));
+                panelPrincipal.remove(panelPrincipal.getComponent(1));
+                GUIActividades res = new GUIActividades();
+                panelPrincipal.add(res.refresh(), gbc);
+                panelPrincipal.revalidate();
+                panelPrincipal.repaint();
+            }
         }
     }
 }

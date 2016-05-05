@@ -26,15 +26,19 @@ public class Garmin {
     /**
      * @param args the command line arguments
      */
+    public static Usuario usuario;
+    public static boolean sesionIniciada = false;
+    
     public static void main(String[] args) {
         // TODO code application logic here
         Usuario usuario1 = new Usuario("Pablo", "Masculino", "Torto", "fufo", "pablotortoriello@gmail.com",
                 1.87, 67.5, "20/08/1991");
-        Actividad actividad = new Actividad("correr", 3600, 1000, 253, 123);
-        Actividad actividad2 = new Actividad("nadar", 7200, 2500, 541, 176);
-        usuario1.agregarActividad(actividad);
-        usuario1.agregarActividad(actividad2);
+       Actividad actividad = new Actividad("correr", new Date(),new Date(), new Date());
+       /*Actividad actividad2 = new Actividad("nadar", new Date(22,8,15),new Date(22,8,15), new Date(22,8,15));
+       usuario1.agregarActividad(actividad);*/
+       usuario1.agregarActividad(actividad);
 
+        
         try{
         usuario1.guardar();
         } catch(Exception e){

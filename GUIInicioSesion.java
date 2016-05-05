@@ -28,10 +28,11 @@ import javax.swing.*;
  */
 public class GUIInicioSesion {
 
-    private JPanel panel;
+    private JPanel panel, panelSesionIniciada;
     private JTextField usuarioTF, passwordTF;
 
     public GUIInicioSesion() {
+
         this.panel = new JPanel();
         this.panel.setBackground(new Color(37, 64, 113));
         this.panel.setLayout(new GridBagLayout());
@@ -39,58 +40,68 @@ public class GUIInicioSesion {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
+        if (!Garmin.sesionIniciada) {
+            JPanel panelInicioSesion = new JPanel();
+            panelInicioSesion.setLayout(new GridBagLayout());
+            this.panel.add(panelInicioSesion, gbc);
 
-        JPanel panelInicioSesion = new JPanel();
-        panelInicioSesion.setLayout(new GridBagLayout());
-        this.panel.add(panelInicioSesion, gbc);
+            JLabel usuarioL, passwordL;
+            usuarioL = new JLabel("Usuario:");
+            passwordL = new JLabel("Contraseña:");
+            this.usuarioTF = new JTextField();
+            this.passwordTF = new JTextField();
+            JButton iniciaSesionB = new JButton("Iniciar Sesion");
+            iniciaSesionB.addActionListener(new IniciaSesionListener());
+            JButton crearCuentaB = new JButton("Crear Cuenta");
 
-        JLabel usuarioL, passwordL;
-        usuarioL = new JLabel("Usuario:");
-        passwordL = new JLabel("Contraseña:");
-        this.usuarioTF = new JTextField();
-        this.passwordTF = new JTextField();
-        JButton iniciaSesionB = new JButton("Iniciar Sesion");
-        iniciaSesionB.addActionListener(new IniciaSesionListener());
-        JButton crearCuentaB = new JButton("Crear Cuenta");
-
-        gbc.gridy = 0;
-        gbc.insets = new Insets(50, 100, 0, 100);
-        panelInicioSesion.add(usuarioL, gbc);
-        gbc.gridy = 1;
-        gbc.insets = new Insets(0, 100, 10, 100);
-        panelInicioSesion.add(usuarioTF, gbc);
-        gbc.gridy = 2;
-        gbc.insets = new Insets(0, 100, 0, 100);
-        panelInicioSesion.add(passwordL, gbc);
-        gbc.gridy = 3;
-        gbc.insets = new Insets(0, 100, 10, 100);
-        panelInicioSesion.add(passwordTF, gbc);
-        gbc.gridy = 4;
-        panelInicioSesion.add(iniciaSesionB, gbc);
-        gbc.gridy = 5;
-        gbc.insets = new Insets(0, 100, 50, 100);
-        panelInicioSesion.add(crearCuentaB, gbc);
+            gbc.gridy = 0;
+            gbc.insets = new Insets(50, 100, 0, 100);
+            panelInicioSesion.add(usuarioL, gbc);
+            gbc.gridy = 1;
+            gbc.insets = new Insets(0, 100, 10, 100);
+            panelInicioSesion.add(usuarioTF, gbc);
+            gbc.gridy = 2;
+            gbc.insets = new Insets(0, 100, 0, 100);
+            panelInicioSesion.add(passwordL, gbc);
+            gbc.gridy = 3;
+            gbc.insets = new Insets(0, 100, 10, 100);
+            panelInicioSesion.add(passwordTF, gbc);
+            gbc.gridy = 4;
+            panelInicioSesion.add(iniciaSesionB, gbc);
+            gbc.gridy = 5;
+            gbc.insets = new Insets(0, 100, 50, 100);
+            panelInicioSesion.add(crearCuentaB, gbc);
+        } else {
+            panelSesionIniciada = new JPanel();
+            panelSesionIniciada.setLayout(new GridBagLayout());
+            JLabel bienvenidaL = new JLabel();
+            JButton cerrarSesionB = new JButton("Salir");
+            cerrarSesionB.addActionListener(new cerrarSesionListener());
+            this.panel.add(panelSesionIniciada);
+            if (Garmin.usuario.getSexo().equals("Masculino")) {
+                bienvenidaL.setText("¡Bienvenido " + Garmin.usuario.getApodo() + "!");
+            } else {
+                bienvenidaL.setText("¡Bienvenida " + Garmin.usuario.getApodo() + "!");
+            }
+            gbc.insets = new Insets(100, 100, 15, 100);
+            panelSesionIniciada.add(bienvenidaL, gbc);
+            gbc.gridy = 1;
+            gbc.insets = new Insets(0, 100, 100, 100);
+            panelSesionIniciada.add(cerrarSesionB, gbc);
+        }
     }
 
     public JPanel refresh() {
         return this.panel;
     }
 
-    public Usuario getUsuario() {
-        FileInputStream fin;
-        try {
-            fin = new FileInputStream("test/user_" + this.usuarioTF.getText() + ".txt");
-            ObjectInputStream ois = new ObjectInputStream(fin);
-            Usuario leido = (Usuario) ois.readObject();
-            System.out.println("lei al usuario:" + leido.getApodo());
-        } catch (FileNotFoundException ex) {
-            System.out.println("No se enconto el archivo");
-        } catch (IOException ex) {
-            System.out.println("No se pudo abrir el archivo");
-        } catch (ClassNotFoundException ex) {
-            System.out.println("No se pudo leer el objeto");
+    class cerrarSesionListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Garmin.sesionIniciada = false;
         }
-        return null;
+
     }
 
     class IniciaSesionListener implements ActionListener {
@@ -100,7 +111,7 @@ public class GUIInicioSesion {
         @Override
         public void actionPerformed(ActionEvent e) {
             String usuarioLeido, passwordLeido;
-            boolean sesionIniciada = false, noEncontrado = false;
+            boolean noEncontrado = false;
             this.usuario = usuarioTF.getText();
             this.password = passwordTF.getText();
             String lectura;
@@ -108,7 +119,7 @@ public class GUIInicioSesion {
             try {
                 FileReader fr = new FileReader("test/usuarios.txt");
                 BufferedReader br = new BufferedReader(fr);
-                while (!sesionIniciada && !noEncontrado) {
+                while (!Garmin.sesionIniciada && !noEncontrado) {
                     lectura = br.readLine();
                     if (lectura == null) {
                         System.out.println("No se encontro al usuario");
@@ -118,8 +129,31 @@ public class GUIInicioSesion {
                         usuarioLeido = st.nextToken();
                         passwordLeido = st.nextToken();
                         if (this.usuario.equals(usuarioLeido) && this.password.equals(passwordLeido)) {
-                            sesionIniciada = true;
-                            UsuarioSingleton user = new UsuarioSingleton(Usuario.load(this.usuario));
+                            Garmin.sesionIniciada = true;
+                            Garmin.usuario = Usuario.load(this.usuario);
+                            panel.remove(panel.getComponent(0));
+                            panelSesionIniciada = new JPanel();
+                            panelSesionIniciada.setLayout(new GridBagLayout());
+                            JLabel bienvenidaL = new JLabel();
+                            JButton cerrarSesionB = new JButton("Salir");
+                            cerrarSesionB.addActionListener(new cerrarSesionListener());
+                            GridBagConstraints gbc = new GridBagConstraints();
+                            gbc.fill = GridBagConstraints.HORIZONTAL;
+                            gbc.gridx = 0;
+                            gbc.gridy = 0;
+                            gbc.insets = new Insets(100, 100, 15, 100);
+                            if (Garmin.usuario.getSexo().equals("Masculino")) {
+                                bienvenidaL.setText("¡Bienvenido " + Garmin.usuario.getApodo() + "!");
+                            } else {
+                                bienvenidaL.setText("¡Bienvenida " + Garmin.usuario.getApodo() + "!");
+                            }
+                            panelSesionIniciada.add(bienvenidaL, gbc);
+                            gbc.gridy = 1;
+                            gbc.insets = new Insets(0, 100, 100, 100);
+                            panelSesionIniciada.add(cerrarSesionB, gbc);
+                            panel.add(panelSesionIniciada);
+                            panel.revalidate();
+                            panel.repaint();
                         }
                     }
                 }
@@ -129,6 +163,5 @@ public class GUIInicioSesion {
                 System.out.println("No se pudo leer del archivo");
             }
         }
-
     }
 }

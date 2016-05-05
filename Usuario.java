@@ -9,8 +9,6 @@ import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -92,6 +90,9 @@ public class Usuario implements Serializable {
      * @param actividad Actividad que se va a agregar
      */
     public void agregarActividad(Actividad actividad) {
+        if(this.actividades == null){
+            this.actividades = new ArrayList<Actividad>();
+        }
         this.actividades.add(actividad);
 
     }
