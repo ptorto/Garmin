@@ -25,26 +25,26 @@ public class Garmin {
         Usuario usuario1 = new Usuario("Pablo", "Masculino", "Torto", "fufo", "pablotortoriello@gmail.com",
                 1.87, 67.5, "20/08/1991");
         Date fecha = new Date();
-        Actividad actividad = new Actividad("Correr", fecha, fecha, fecha);
-        Actividad actividad2 = new Actividad("Nadar", new Date(2015, 8, 15), new Date(2015, 8, 15), new Date(2015, 8, 15));
-        Actividad actividad3 = new Actividad("Bici", new Date(2015, 8, 15), new Date(2015, 8, 15), new Date(2015, 8, 15));
-        Actividad actividad4 = new Actividad("Nadar", new Date(2015, 8, 15), new Date(2015, 8, 15), new Date(2015, 8, 15));
-        Actividad actividad5 = new Actividad("Caminata", new Date(2015, 8, 15), new Date(2015, 8, 15), new Date(2015, 8, 15));
+        Actividad actividad = new Actividad("Correr", fecha);
+        Actividad actividad2 = new Actividad("Nadar", new Date(2015, 8, 15));
+        Actividad actividad3 = new Actividad("Bici", new Date(2015, 8, 15));
+        Actividad actividad4 = new Actividad("Nadar", new Date(2015, 8, 15));
+        Actividad actividad5 = new Actividad("Caminata", new Date(2015, 8, 15));
         
         actividad.agregarMedicion(new Medicion(0,0,124));
-        actividad.agregarMedicion(new Medicion(0.1,100,128));
-        actividad.agregarMedicion(new Medicion(0.2,220,130));
-        actividad.agregarMedicion(new Medicion(0.4,380,127));
-        actividad.agregarMedicion(new Medicion(0.55,490,124));
-        actividad.agregarMedicion(new Medicion(0.7,681,125));
-        actividad.agregarMedicion(new Medicion(0.84,812,125));
-        actividad.agregarMedicion(new Medicion(0.99,920,124));
-        actividad.agregarMedicion(new Medicion(1.1,1200,128));
-        actividad.agregarMedicion(new Medicion(1.3,1400,130));
-        actividad.agregarMedicion(new Medicion(1.45,1562,127));
-        actividad.agregarMedicion(new Medicion(1.67,1890,124));
-        actividad.agregarMedicion(new Medicion(1.82,2100,125));
-        actividad.agregarMedicion(new Medicion(1.95,2283,125));
+        actividad.agregarMedicion(new Medicion(1,360,128));
+        actividad.agregarMedicion(new Medicion(2.2,800,130));
+        actividad.agregarMedicion(new Medicion(4.4,1400,127));
+        actividad.agregarMedicion(new Medicion(5.55,1600,124));
+        actividad.agregarMedicion(new Medicion(6.7,2120,125));
+        actividad.agregarMedicion(new Medicion(7.84,2500,125));
+        actividad.agregarMedicion(new Medicion(8.99,2900,124));
+        actividad.agregarMedicion(new Medicion(9.1,3214,128));
+        actividad.agregarMedicion(new Medicion(10.3,3700,130));
+        actividad.agregarMedicion(new Medicion(11.45,4012,127));
+        actividad.agregarMedicion(new Medicion(12.67,4690,124));
+        actividad.agregarMedicion(new Medicion(13.82,5015,125));
+        actividad.agregarMedicion(new Medicion(14.95,5298,125));
         
         actividad2.agregarMedicion(new Medicion(0,0,124));
         actividad2.agregarMedicion(new Medicion(0.1,100,128));

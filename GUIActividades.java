@@ -7,21 +7,22 @@ package garmin;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -37,8 +38,9 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 public class GUIActividades {
 
     private JPanel panel;
-    JPanel[] paneles;
-
+    private JTextField distanciaTF;
+    private JSpinner actividadesS, fechaInicioS, fechaFinS;
+    
     public GUIActividades() {
         this.panel = new JPanel();
         this.panel.setBackground(new Color(37, 64, 113));
@@ -71,15 +73,16 @@ public class GUIActividades {
         label3 = new JLabel("Fecha de fin:");
         label4 = new JLabel("Distancia recorrida");
         label5 = new JLabel("Km");
-        JTextField distanciaTF = new JTextField("10");
+        distanciaTF = new JTextField("10");
         String[] tipoActividades = {"Correr", "Nadar", "Bicicleta", "Caminata"};
         SpinnerListModel actividadesModel = new SpinnerListModel(tipoActividades);
-        JSpinner actividadesS = new JSpinner(actividadesModel);
+        actividadesS = new JSpinner(actividadesModel);
 
-        JSpinner fechaInicioS = new JSpinner(new SpinnerDateModel());
-        JSpinner fechaFinS = new JSpinner(new SpinnerDateModel());
+        fechaInicioS = new JSpinner(new SpinnerDateModel());
+        fechaFinS = new JSpinner(new SpinnerDateModel());
 
         JButton agregarB = new JButton("Agregar");
+        agregarB.addActionListener(new AgregarActionListener());
 
         gbc.gridy = 0;
         gbc.weightx = 0;
@@ -112,7 +115,7 @@ public class GUIActividades {
         gbc.insets = new Insets(0, 50, 20, 50);
         panelAgregar.add(agregarB, gbc);
 
-        this.paneles = new JPanel[4];
+        JPanel[] paneles = new JPanel[4];
         JLabel fechaActividad[] = new JLabel[4];
         JLabel tipoActividad[] = new JLabel[4];
         JLabel tiempoTotal[] = new JLabel[4];
@@ -125,13 +128,22 @@ public class GUIActividades {
         gbc2 = new GridBagConstraints();
         gbc2.fill = GridBagConstraints.NONE;
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        
+        /*
+        ordenar actividades por fecha para sacar las ultimas 4
+        */
+        Actividad act;
+        for(int i = 0; i< actividades.size(); i++){
+            
+        }
+        
         for (int i = 0; i < 4; i++) {
             if (i < actividades.size()) {
-                this.paneles[i] = new JPanel();
-                this.paneles[i].setLayout(new GridBagLayout());
-                this.paneles[i].setBorder(BorderFactory.createLineBorder(new Color(37, 64, 113), 10));
-                this.paneles[i].addMouseListener(new PanelActividadListener());
-                this.paneles[i].setName("panel" + i);
+                paneles[i] = new JPanel();
+                paneles[i].setLayout(new GridBagLayout());
+                paneles[i].setBorder(BorderFactory.createLineBorder(new Color(37, 64, 113), 10));
+                paneles[i].addMouseListener(new PanelActividadListener());
+                paneles[i].setName("panel" + i);
 
                 fechaActividad[i] = new JLabel(df.format(actividades.get(i).getFecha()));
 
@@ -171,67 +183,110 @@ public class GUIActividades {
             String name = panel.getName();
             ArrayList<Actividad> actividades = Garmin.usuario.getActividades();
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            Actividad actividad;
+            int numActividad;
             if (name.equals("panel0")) {
-                JDialog dialog = new JDialog();
-                dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-                dialog.setSize(900, 650);
-                dialog.setLayout(new GridBagLayout());
-                GridBagConstraints gbc = new GridBagConstraints();
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-                gbc.gridx = 0;
-                gbc.gridy = 0;
-                gbc.weightx = 0.2;
-                gbc.weighty = 1;
-                gbc.gridwidth = 1;
-                JPanel panelInfo, panelGraf;
-                panelInfo = new JPanel();
-                panelInfo.setBackground(Color.red);
-                dialog.add(panelInfo, gbc);
-
-                panelGraf = new JPanel();
-                panelGraf.setBackground(Color.green);
-                panelGraf.setLayout(new GridBagLayout());
-                gbc.gridx = 1;
-                gbc.weightx = 1;
-                dialog.add(panelGraf,gbc);
-                dialog.setTitle("Actividad " + df.format(actividades.get(0).getFecha()));
-
-             /*   List<Integer> datos = new ArrayList<Integer>();
-                datos.add(5);
-                datos.add(13);
-                datos.add(7);
-                datos.add(11);
-                datos.add(10);
-                datos.add(2);
-                datos.add(4);
-                datos.add(5);
-                datos.add(5);
-                datos.add(5);
-                datos.add(13);
-                datos.add(21);
-                datos.add(11);
-                datos.add(13);
-                datos.add(2);
-                datos.add(4);
-                datos.add(16);
-                datos.add(14);*/
-                gbc.fill = GridBagConstraints.NONE;
-                gbc.gridx = 0;
-                gbc.gridy = 0;
-                panelGraf.add(new DrawGraph(actividades.get(0).getFrecuencias()),gbc);
-                gbc.gridy = 1;
-                panelGraf.add(new DrawGraph(actividades.get(0).getVelocidades()),gbc);
-                dialog.setVisible(true);
+                numActividad = 0;
+            } else if (name.equals("panel1")) {
+                numActividad = 1;
+            } else if (name.equals("panel2")) {
+                numActividad = 2;
+            } else {
+                numActividad = 3;
             }
-            if (name.equals("panel1")) {
 
-            }
-            if (name.equals("panel2")) {
+            actividad = actividades.get(numActividad);
 
-            }
-            if (name.equals("panel3")) {
+            JDialog dialog = new JDialog();
+            dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            dialog.setSize(900, 650);
+            dialog.setTitle("Actividad " + df.format(actividad.getFecha()));
 
-            }
+            JPanel panelDialog = new JPanel();
+            panelDialog.setLayout(new GridBagLayout());
+            panelDialog.setBackground(new Color(37, 64, 113));
+
+            dialog.add(panelDialog);
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.fill = GridBagConstraints.NONE;
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.weightx = 0.4;
+            gbc.weighty = 1;
+            gbc.gridwidth = 1;
+
+            JPanel panelInfo, panelGraf;
+            panelInfo = new JPanel();
+            panelInfo.setLayout(new GridBagLayout());
+            panelDialog.add(panelInfo, gbc);
+
+            panelGraf = new JPanel();
+            panelGraf.setLayout(new GridBagLayout());
+            panelGraf.setBackground(new Color(37, 64, 113));
+            gbc.gridx = 1;
+            gbc.weightx = 1;
+            panelDialog.add(panelGraf, gbc);
+
+            JLabel label0, label1, label2, label3, label4, label5, label6;
+            label0 = new JLabel(actividad.getTipoActividad());
+            label1 = new JLabel("Fecha de actividad: " + df.format(actividad.getFecha()));
+            label2 = new JLabel("Tiempo de actividad: " + actividad.tiempoToString());
+            label3 = new JLabel("Velocidad promedio: " + new DecimalFormat("#.##").format(actividad.getVelPromedio()) + " Km/hr");
+            label4 = new JLabel("Frec cardiaca promedio: " + actividad.getFrecPromedio() + " lpm");
+            label5 = new JLabel("Frec cardiaca max: " + actividad.getFrecMax() + " lpm");
+            label6 = new JLabel("Calorias quemadas: " + actividad.getCalorias() + " Kcal");
+
+            gbc.gridy = 0;
+            gbc.insets = new Insets(20, 30, 10, 30);
+            panelInfo.add(label0, gbc);
+            gbc.insets = new Insets(10, 30, 0, 30);
+            gbc.gridy = 1;
+            panelInfo.add(label1, gbc);
+            gbc.gridy = 2;
+            panelInfo.add(label2, gbc);
+            gbc.gridy = 3;
+            panelInfo.add(label3, gbc);
+            gbc.gridy = 4;
+            panelInfo.add(label4, gbc);
+            gbc.gridy = 5;
+            panelInfo.add(label5, gbc);
+            gbc.gridy = 6;
+            gbc.insets = new Insets(10, 30, 20, 30);
+            panelInfo.add(label6, gbc);
+
+            gbc.fill = GridBagConstraints.NONE;
+            gbc.insets = new Insets(5, 5, 0, 5);
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            panelGraf.add(new JLabel("Velocidad vs Tiempo"),gbc);
+            gbc.gridy = 1;
+            gbc.insets = new Insets(0, 5, 0, 5);
+            JPanel graficaVelTiempo = new DrawGraph(actividad.getVelocidadesGrafica());
+            graficaVelTiempo.setBorder(BorderFactory.createLineBorder(new Color(37, 64, 113), 10));
+            
+            panelGraf.add(graficaVelTiempo, gbc);
+            
+
+            gbc.gridy = 2;
+            gbc.insets = new Insets(5, 5, 0, 5);
+            panelGraf.add(new JLabel("Frecuencia cardiaca vs Tiempo"),gbc);
+            gbc.gridy = 3;
+            gbc.insets = new Insets(0, 5, 0, 5);
+            JPanel graficaFrecTiempo = new DrawGraph(actividad.getFrecuencias());
+            graficaFrecTiempo.setBorder(BorderFactory.createLineBorder(new Color(37, 64, 113), 10));
+            panelGraf.add(graficaFrecTiempo, gbc);
+
+            gbc.gridy = 4;
+            gbc.insets = new Insets(5, 5, 0, 5);
+            panelGraf.add(new JLabel("Frecuencia cardiaca vs Tiempo"),gbc);
+            gbc.gridy = 5;
+            gbc.insets = new Insets(0, 5, 0, 5);
+            JPanel graficaFrecTiempo2 = new DrawGraph(actividad.getVelocidadesGrafica());
+            graficaFrecTiempo2.setBorder(BorderFactory.createLineBorder(new Color(37, 64, 113), 10));
+            panelGraf.add(graficaFrecTiempo2, gbc);
+
+            dialog.setVisible(true);
         }
 
         @Override
@@ -252,6 +307,18 @@ public class GUIActividades {
 
     }
 
+    class AgregarActionListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String tipoActividad = (String)actividadesS.getValue();
+            Date fechaInicio = (Date)fechaInicioS.getValue();
+            Date fechaFin = (Date)fechaFinS.getValue();
+            double distancia = Double.parseDouble(distanciaTF.getText());
+            System.out.println(distancia);
+        }
+    }
+    
     public JPanel refresh() {
         return this.panel;
     }

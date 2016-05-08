@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -18,18 +19,72 @@ public class Actividad implements Serializable {
 
     private String tipoActividad;
     private Date fecha;
-    private Date horaInicio;
-    private Date horaFin;
     ArrayList<Medicion> mediciones;
-    
-    
 
-    public Actividad(String tipoActividad, Date fecha, Date horaInicio, Date horaFin) {
+    public Actividad(String tipoActividad, Date fecha) {
         this.tipoActividad = tipoActividad;
         this.fecha = fecha;
-        this.horaInicio = horaInicio;
-        this.horaFin = horaFin;
         this.mediciones = new ArrayList<Medicion>();
+    }
+
+    public static Actividad actRandon(String tipoActividad, Date fechaInicio, Date fechaFin, double dist) {
+        Actividad actividad;
+        Medicion medicion;
+        actividad = new Actividad(tipoActividad, fechaInicio);
+
+        double tiempo = (fechaFin.getTime() - fechaInicio.getTime()) * 0.001;
+        double distancia = 0;
+        final double DISTANCIA = 111;
+        int frecCardiaca;
+        double velocidad, tempDistancia;
+
+        Random rand = new Random();
+
+        switch (tipoActividad) {
+            case "Correr":
+
+                break;
+            case "Nadar":
+                break;
+            case "Bicicleta":
+                for (int i = 0; i < tiempo; i += 20) {
+                    if (i == 0) {
+                        frecCardiaca = 60 + rand.nextInt(6);
+                        medicion = new Medicion(0, 0, frecCardiaca);
+                        actividad.agregarMedicion(medicion);
+                    } else {
+
+                        tempDistancia = DISTANCIA + rand.nextInt(55);
+                        distancia += tempDistancia;
+                        velocidad = tempDistancia / i;
+
+                        if (distancia < 800) {
+                            frecCardiaca = 63 + rand.nextInt(5);
+                        } else if (distancia < 1500) {
+                            frecCardiaca = 67 + rand.nextInt(10);
+                        } else if (distancia < 2200) {
+                            frecCardiaca = 75 + rand.nextInt(15);
+                        } else if (distancia < 3500) {
+                            frecCardiaca = 87 + rand.nextInt(15);
+                        } else {
+                            frecCardiaca = 120 + rand.nextInt(13);
+                            if (velocidad > 25) {
+                                frecCardiaca = 130 + rand.nextInt(12);
+                            }
+                        }
+                        medicion = new Medicion(distancia / 1000, i, frecCardiaca);
+                        actividad.agregarMedicion(medicion);
+                        /*
+                        refresh panel actividades
+                         */
+                        Garmin.usuario.agregarActividad(actividad);
+                    }
+                }
+                break;
+            case "Caminata":
+                break;
+        }
+        return actividad;
     }
 
     public String getTipoActividad() {
@@ -40,10 +95,6 @@ public class Actividad implements Serializable {
         return fecha;
     }
 
-    public Date getHoraInicio() {
-        return horaInicio;
-    }
-
     public ArrayList<Medicion> getMediciones() {
         return this.mediciones;
     }
@@ -51,11 +102,10 @@ public class Actividad implements Serializable {
     public void agregarMedicion(Medicion medicion) {
         mediciones.add(medicion);
     }
-    
-     public double getTiempoTotal() {
 
+    public double getTiempoTotal() {
 
-        return this.mediciones.get(this.mediciones.size()-1).getTiempo();
+        return this.mediciones.get(this.mediciones.size() - 1).getTiempo();
     }
 
     public double getVelMax() {
@@ -67,24 +117,32 @@ public class Actividad implements Serializable {
         }
         return velMax;
     }
-    
-    public String tiempoToString(){
-        int horas; 
+
+    public String tiempoToString() {
+        int horas;
         double minutos;
-        horas = (int) Math.floor(this.getTiempoTotal()*0.000277778);
-        minutos = this.getTiempoTotal()*0.000277778 % 1;
-        
-        if(horas == 0){
-            return (int)(minutos*60) + "m";
+        horas = (int) Math.floor(this.getTiempoTotal() * 0.000277778);
+        minutos = this.getTiempoTotal() * 0.000277778 % 1;
+
+        if (horas == 0) {
+            return (int) (minutos * 60) + "m";
+        } else {
+            return horas + "h  " + (int) (minutos * 60) + "m";
         }
-        else
-            return horas+"h  "+(int)(minutos * 60) +"m";
     }
-    
+
     public double getVelPromedio() {
-        double velAcumulada = 0;
+        double velAcumulada = 0, tiempo, distancia;
+        double tempTiempo = 0, tempDistancia = 0;
+
         for (Medicion medicion : this.mediciones) {
-            velAcumulada += medicion.getDistancia() / medicion.getTiempo();
+            tiempo = (medicion.getTiempo() - tempTiempo) / 3600;
+            distancia = (medicion.getDistancia() - tempDistancia);
+            if (distancia != 0) {
+                velAcumulada += distancia / tiempo;
+            }
+            tempTiempo = medicion.getTiempo();
+            tempDistancia = medicion.getDistancia();
         }
         return velAcumulada / this.mediciones.size();
     }
@@ -94,22 +152,32 @@ public class Actividad implements Serializable {
         for (Medicion medicion : this.mediciones) {
             frecAcumulada += medicion.getFrecCardiaca();
         }
-        return (int)frecAcumulada / this.mediciones.size();
+        return (int) frecAcumulada / this.mediciones.size();
     }
-    
+
     public List<Integer> getFrecuencias() {
         List<Integer> datos = new ArrayList<Integer>();
-        for (Medicion medicion : this.mediciones){
-            datos.add((int)medicion.getFrecCardiaca());
+        for (Medicion medicion : this.mediciones) {
+            datos.add((int) medicion.getFrecCardiaca());
         }
         return datos;
     }
-    
-    public List<Integer> getVelocidades() {
+
+    public List<Integer> getVelocidadesGrafica() {
         List<Integer> datos = new ArrayList<Integer>();
-        for (Medicion medicion : this.mediciones){
-            datos.add((int)(( medicion.getDistancia()*1000 / medicion.getTiempo() )*3.6));
-            System.out.println("vel: " + (int)( medicion.getDistancia()*1000 / medicion.getTiempo() )*3.6);
+        double tempTiempo = 0, tempDistancia = 0;
+        double velocidad;
+        for (Medicion medicion : this.mediciones) {
+            if (medicion.getDistancia() == 0) {
+                datos.add(0);
+            } else {
+                double tiempo = (medicion.getTiempo() - tempTiempo) / 3600;
+                double distancia = (medicion.getDistancia() - tempDistancia);
+                velocidad = distancia / tiempo;
+                datos.add((int) velocidad);
+                tempTiempo = medicion.getTiempo();
+                tempDistancia = medicion.getDistancia();
+            }
         }
         return datos;
     }
@@ -125,17 +193,10 @@ public class Actividad implements Serializable {
     }
 
     public double getDistanciaTotal() {
-        return this.mediciones.get(this.mediciones.size()-1).getDistancia();
-    }
-    
-    public int getCalorias(){
-        return 100;
+        return this.mediciones.get(this.mediciones.size() - 1).getDistancia();
     }
 
-    public void imprime() {
-        System.out.println("Actividad: " + tipoActividad + "\n" + fecha + horaInicio + "\n" + horaFin);
-        for (Medicion medicion : this.mediciones) {
-            System.out.println(medicion);
-        }
+    public int getCalorias() {
+        return 100;
     }
 }

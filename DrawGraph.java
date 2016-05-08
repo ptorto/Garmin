@@ -16,8 +16,8 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class DrawGraph extends JPanel {
    private int MAX_SCORE = 0;
-   private static final int PREF_W = 600;
-   private static final int PREF_H = 200;
+   private static final int PREF_W = 550;
+   private static final int PREF_H = 180;
    private static final int BORDER_GAP = 30;
    private static final Color GRAPH_COLOR = Color.red;
    private static final Color GRAPH_POINT_COLOR = Color.blue;
@@ -33,7 +33,8 @@ public class DrawGraph extends JPanel {
               this.MAX_SCORE = scores.get(i);
           }
       }
-      this.MAX_SCORE += this.MAX_SCORE/5;
+      this.MAX_SCORE += this.MAX_SCORE + 5;
+      System.out.println("MAX_SCORE"+this.MAX_SCORE);
    }
 
    @Override
