@@ -33,6 +33,7 @@ public class GUIPrincipal {
         this.frame.getContentPane().setBackground(new Color(37, 64, 113));
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.frame.setLayout(new BorderLayout());
+        
 
         panelPrincipal = new JPanel();
         panelPrincipal.setBackground(new Color(37, 64, 113));
@@ -91,7 +92,7 @@ public class GUIPrincipal {
 
         botonInicioSesion.doClick();
     }
-
+    
     class IniciarSesionListener implements ActionListener {
 
         @Override

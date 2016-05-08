@@ -6,9 +6,9 @@
 package garmin;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 
 /**
  *
@@ -22,75 +22,80 @@ public class Garmin {
     public static Usuario usuario;
     public static boolean sesionIniciada = false;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         // TODO code application logic here
         Usuario usuario1 = new Usuario("Pablo", "Masculino", "Torto", "fufo", "pablotortoriello@gmail.com",
                 1.87, 67.5, "20/08/1991");
-        
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date fecha =new Date();
-        Actividad actividad = new Actividad("Correr", fecha);
-        
-        Actividad actividad2 = new Actividad("Nadar", new Date());
-        Actividad actividad3 = new Actividad("Bici", new Date());
-        Actividad actividad4 = new Actividad("Nadar", new Date());
-        Actividad actividad5 = new Actividad("Caminata", new Date());
-        
-        actividad.agregarMedicion(new Medicion(0,0,124));
-        actividad.agregarMedicion(new Medicion(1,360,128));
-        actividad.agregarMedicion(new Medicion(2.2,800,130));
-        actividad.agregarMedicion(new Medicion(4.4,1400,127));
-        actividad.agregarMedicion(new Medicion(5.55,1600,124));
-        actividad.agregarMedicion(new Medicion(6.7,2120,125));
-        actividad.agregarMedicion(new Medicion(7.84,2500,125));
-        actividad.agregarMedicion(new Medicion(8.99,2900,124));
-        actividad.agregarMedicion(new Medicion(9.1,3214,128));
-        actividad.agregarMedicion(new Medicion(10.3,3700,130));
-        actividad.agregarMedicion(new Medicion(11.45,4012,127));
-        actividad.agregarMedicion(new Medicion(12.67,4690,124));
-        actividad.agregarMedicion(new Medicion(13.82,5015,125));
-        actividad.agregarMedicion(new Medicion(14.95,5298,125));
-        
-        actividad2.agregarMedicion(new Medicion(0,0,124));
-        actividad2.agregarMedicion(new Medicion(0.1,100,128));
-        actividad2.agregarMedicion(new Medicion(0.2,220,130));
-        actividad2.agregarMedicion(new Medicion(0.4,380,127));
-        actividad2.agregarMedicion(new Medicion(0.55,490,124));
-        actividad2.agregarMedicion(new Medicion(0.7,681,125));
-        actividad2.agregarMedicion(new Medicion(0.84,812,125));
-        
-        actividad3.agregarMedicion(new Medicion(0,0,124));
-        actividad3.agregarMedicion(new Medicion(0.1,100,128));
-        actividad3.agregarMedicion(new Medicion(0.2,220,130));
-        actividad3.agregarMedicion(new Medicion(0.4,380,127));
-        actividad3.agregarMedicion(new Medicion(0.55,490,124));
-        actividad3.agregarMedicion(new Medicion(0.7,681,125));
-        actividad3.agregarMedicion(new Medicion(0.84,1900,125));
-        
-        actividad4.agregarMedicion(new Medicion(0,0,124));
-        actividad4.agregarMedicion(new Medicion(0.1,100,128));
-        actividad4.agregarMedicion(new Medicion(0.2,220,130));
-        actividad4.agregarMedicion(new Medicion(0.4,380,127));
-        actividad4.agregarMedicion(new Medicion(0.55,490,124));
-        actividad4.agregarMedicion(new Medicion(0.7,681,125));
-        actividad4.agregarMedicion(new Medicion(0.84,8632,125));
-        
-        actividad5.agregarMedicion(new Medicion(0,0,124));
-        actividad5.agregarMedicion(new Medicion(0.1,100,128));
-        actividad5.agregarMedicion(new Medicion(0.2,220,130));
-        actividad5.agregarMedicion(new Medicion(0.4,380,127));
-        actividad5.agregarMedicion(new Medicion(0.55,490,124));
-        actividad5.agregarMedicion(new Medicion(0.7,681,125));
-        actividad5.agregarMedicion(new Medicion(0.84,1231,125));
+
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(2015, Calendar.AUGUST, 20);
+
+        Calendar date = new GregorianCalendar(2011, Calendar.JULY, 3);
+        Calendar date2 = new GregorianCalendar(2013, Calendar.JULY, 4);
+        date.add(Calendar.DAY_OF_MONTH,0);
+        date2.add(Calendar.DAY_OF_MONTH, 0);
+
+        Actividad actividad = new Actividad("Correr", date.getTime());
+        Actividad actividad2 = new Actividad("Nadar", date.getTime());
+        Actividad actividad3 = new Actividad("Bici", date2.getTime());
+        Actividad actividad4 = new Actividad("Nadar", date.getTime());
+        Actividad actividad5 = new Actividad("Caminata", date2.getTime());
+
+        actividad.agregarMedicion(new Medicion(0, 0, 124));
+        actividad.agregarMedicion(new Medicion(1, 360, 128));
+        actividad.agregarMedicion(new Medicion(2.2, 800, 130));
+        actividad.agregarMedicion(new Medicion(4.4, 1400, 127));
+        actividad.agregarMedicion(new Medicion(5.55, 1600, 124));
+        actividad.agregarMedicion(new Medicion(6.7, 2120, 125));
+        actividad.agregarMedicion(new Medicion(7.84, 2500, 125));
+        actividad.agregarMedicion(new Medicion(8.99, 2900, 124));
+        actividad.agregarMedicion(new Medicion(9.1, 3214, 128));
+        actividad.agregarMedicion(new Medicion(10.3, 3700, 130));
+        actividad.agregarMedicion(new Medicion(11.45, 4012, 127));
+        actividad.agregarMedicion(new Medicion(12.67, 4690, 124));
+        actividad.agregarMedicion(new Medicion(13.82, 5015, 125));
+        actividad.agregarMedicion(new Medicion(14.95, 5298, 125));
+
+        actividad2.agregarMedicion(new Medicion(0, 0, 124));
+        actividad2.agregarMedicion(new Medicion(0.1, 100, 128));
+        actividad2.agregarMedicion(new Medicion(0.2, 220, 130));
+        actividad2.agregarMedicion(new Medicion(0.4, 380, 127));
+        actividad2.agregarMedicion(new Medicion(0.55, 490, 124));
+        actividad2.agregarMedicion(new Medicion(0.7, 681, 125));
+        actividad2.agregarMedicion(new Medicion(0.84, 812, 125));
+
+        actividad3.agregarMedicion(new Medicion(0, 0, 124));
+        actividad3.agregarMedicion(new Medicion(0.1, 100, 128));
+        actividad3.agregarMedicion(new Medicion(0.2, 220, 130));
+        actividad3.agregarMedicion(new Medicion(0.4, 380, 127));
+        actividad3.agregarMedicion(new Medicion(0.55, 490, 124));
+        actividad3.agregarMedicion(new Medicion(0.7, 681, 125));
+        actividad3.agregarMedicion(new Medicion(0.84, 1900, 125));
+
+        actividad4.agregarMedicion(new Medicion(0, 0, 124));
+        actividad4.agregarMedicion(new Medicion(0.1, 100, 128));
+        actividad4.agregarMedicion(new Medicion(0.2, 220, 130));
+        actividad4.agregarMedicion(new Medicion(0.4, 380, 127));
+        actividad4.agregarMedicion(new Medicion(0.55, 490, 124));
+        actividad4.agregarMedicion(new Medicion(0.7, 681, 125));
+        actividad4.agregarMedicion(new Medicion(0.84, 8632, 125));
+
+        actividad5.agregarMedicion(new Medicion(0, 0, 124));
+        actividad5.agregarMedicion(new Medicion(0.1, 100, 128));
+        actividad5.agregarMedicion(new Medicion(0.2, 220, 130));
+        actividad5.agregarMedicion(new Medicion(0.4, 380, 127));
+        actividad5.agregarMedicion(new Medicion(0.55, 490, 124));
+        actividad5.agregarMedicion(new Medicion(0.7, 681, 125));
+        actividad5.agregarMedicion(new Medicion(0.84, 1231, 125));
         System.out.println(actividad.tiempoToString());
-        
+
         usuario1.agregarActividad(actividad);
         usuario1.agregarActividad(actividad2);
         usuario1.agregarActividad(actividad3);
         usuario1.agregarActividad(actividad4);
         usuario1.agregarActividad(actividad5);
 
-        
         try {
             usuario1.guardar();
         } catch (Exception e) {

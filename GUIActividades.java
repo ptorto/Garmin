@@ -44,6 +44,7 @@ public class GUIActividades {
     private JPanel panel;
     private JTextField distanciaTF;
     private JSpinner actividadesS, fechaInicioS, fechaFinS;
+    private ArrayList<Actividad> actMostradas;
 
     public GUIActividades() {
         this.panel = new JPanel();
@@ -136,23 +137,31 @@ public class GUIActividades {
         /*
         ordenar actividades por fecha para sacar las ultimas 4
          */
-        
         Actividad act;
-        ArrayList<Actividad> actMostradas = new ArrayList<Actividad>();
-        
-        HashMap<Actividad, Date> hmap = new HashMap<Actividad, Date>();
-        for(int i = 0; i < actividades.size();i++){
-            hmap.put(actividades.get(i), actividades.get(i).getFecha());
+        actMostradas = new ArrayList<Actividad>();
+
+        HashMap<Date, Actividad> hmap = new HashMap<Date, Actividad>();
+        for (int i = 0; i < actividades.size(); i++) {
+            hmap.put(actividades.get(i).getFecha(), actividades.get(i));
         }
-        
-        Set set = hmap.entrySet();
-        Iterator iter = set.iterator();
-        while(iter.hasNext()){
-            Map.Entry elem = (Map.Entry)iter.next();
-            elem.getValue();
+
+        Date fechaTemp = new Date(0);
+        Map.Entry<Date, Actividad> entryTemp = null;
+        for (int i = 0; i < 4; i++) {
+            for (Map.Entry<Date, Actividad> entry : hmap.entrySet()) {
+                Date fecha = entry.getKey();
+                if (fecha.getTime() > fechaTemp.getTime()) {
+                    fechaTemp = fecha;
+                    System.out.println(fechaTemp);
+                    entryTemp = entry;
+                }
+            }
+            fechaTemp = new Date(0);
+            actMostradas.add(entryTemp.getValue());
+            hmap.remove(entryTemp.getKey());
         }
-        
-        
+
+
         /*
         for (int j = 0, elim = 10; j < 4; j++) {
             for (int i = 1; i < actTemp.size(); i++) {
@@ -166,7 +175,7 @@ public class GUIActividades {
             }
             actMostradas.add(act);
         }
-*//*
+         */
         for (int i = 0; i < 4; i++) {
             paneles[i] = new JPanel();
             paneles[i].setLayout(new GridBagLayout());
@@ -200,7 +209,6 @@ public class GUIActividades {
             panelActividades.add(paneles[i]);
 
         }
-*/
     }
 
     class PanelActividadListener implements MouseListener {
@@ -213,18 +221,26 @@ public class GUIActividades {
             ArrayList<Actividad> actividades = Garmin.usuario.getActividades();
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             Actividad actividad;
+            System.out.println("panel picado: "+name);
             int numActividad;
             if (name.equals("panel0")) {
                 numActividad = 0;
             } else if (name.equals("panel1")) {
                 numActividad = 1;
+                
             } else if (name.equals("panel2")) {
                 numActividad = 2;
             } else {
                 numActividad = 3;
             }
+            
+            System.out.println("numAct: "+numActividad);
 
-            actividad = actividades.get(numActividad);
+            /*
+            hacer el hasmap hmap de clase para poder entrar y buscar por la fecha
+            si no siempre sale la info de los mismos 4
+             */
+            actividad = actMostradas.get(numActividad);
 
             JDialog dialog = new JDialog();
             dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -343,7 +359,8 @@ public class GUIActividades {
             Date fechaInicio = (Date) fechaInicioS.getValue();
             Date fechaFin = (Date) fechaFinS.getValue();
             double distancia = Double.parseDouble(distanciaTF.getText());
-            System.out.println(distancia);
+
+            Garmin.usuario.agregarActividad(Actividad.actRandon(tipoActividad, fechaInicio, fechaFin, distancia));
         }
     }
 

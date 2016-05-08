@@ -34,9 +34,9 @@ public class Actividad implements Serializable {
 
         double tiempo = (fechaFin.getTime() - fechaInicio.getTime()) * 0.001;
         double distancia = 0;
-        final double DISTANCIA = 111;
-        int frecCardiaca;
-        double velocidad, tempDistancia;
+        final double DISTANCIA = 333;
+        int frecCardiaca = 0;
+        double velocidad, tempDistancia = 0;
 
         Random rand = new Random();
 
@@ -47,39 +47,57 @@ public class Actividad implements Serializable {
             case "Nadar":
                 break;
             case "Bicicleta":
-                for (int i = 0; i < tiempo; i += 20) {
+                int i;
+                for (i = 0; i < tiempo; i += 60) {
                     if (i == 0) {
                         frecCardiaca = 60 + rand.nextInt(6);
                         medicion = new Medicion(0, 0, frecCardiaca);
                         actividad.agregarMedicion(medicion);
                     } else {
+                        if (tempDistancia < 375) {
+                            tempDistancia = DISTANCIA + rand.nextInt(40);
+                        } else if (tempDistancia < 425) {
+                            tempDistancia = 400 + rand.nextInt(40);
+                        } else if (tempDistancia < 470) {
+                            tempDistancia = 450 + rand.nextInt(80);
+                        }
 
-                        tempDistancia = DISTANCIA + rand.nextInt(55);
                         distancia += tempDistancia;
                         velocidad = tempDistancia / i;
+                        
+                        System.out.println("distancia"+distancia+"vel"+velocidad);
 
                         if (distancia < 800) {
                             frecCardiaca = 63 + rand.nextInt(5);
                         } else if (distancia < 1500) {
                             frecCardiaca = 67 + rand.nextInt(10);
-                        } else if (distancia < 2200) {
+                        } else if (distancia < 2100) {
                             frecCardiaca = 75 + rand.nextInt(15);
-                        } else if (distancia < 3500) {
-                            frecCardiaca = 87 + rand.nextInt(15);
+                        } else if (distancia < 2700) {
+                            frecCardiaca = 84 + rand.nextInt(10);
+                        } else if (distancia < 3100) {
+                            frecCardiaca = 92 + rand.nextInt(10);
+                        } else if (distancia < 3600) {
+                            frecCardiaca = 100 + rand.nextInt(15);
                         } else {
                             frecCardiaca = 120 + rand.nextInt(13);
                             if (velocidad > 25) {
                                 frecCardiaca = 130 + rand.nextInt(12);
                             }
                         }
-                        medicion = new Medicion(distancia / 1000, i, frecCardiaca);
-                        actividad.agregarMedicion(medicion);
-                        /*
-                        refresh panel actividades
-                         */
-                        Garmin.usuario.agregarActividad(actividad);
+                        if (distancia < dist * 1000) {
+                            medicion = new Medicion(distancia / 1000, i, frecCardiaca);
+                            actividad.agregarMedicion(medicion);
+                        }
+                        
+                        System.out.println("freccard: "+frecCardiaca );
+
                     }
+
                 }
+                medicion = new Medicion(dist, i, frecCardiaca);
+                actividad.agregarMedicion(medicion);
+                Garmin.usuario.agregarActividad(actividad);
                 break;
             case "Caminata":
                 break;

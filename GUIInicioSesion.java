@@ -6,6 +6,7 @@
 package garmin;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -29,7 +30,9 @@ import javax.swing.*;
 public class GUIInicioSesion {
 
     private JPanel panel, panelSesionIniciada;
-    private JTextField usuarioTF, passwordTF;
+    private JTextField usuarioTF, passwordTF, nombreTF, apodoTF, emailTF, contrasenaTF, alturaTF, pesoTF;
+    private JRadioButton masculinoRB, femeninoRB;
+    private JSpinner fechaNacimientoS;
 
     public GUIInicioSesion() {
 
@@ -104,14 +107,144 @@ public class GUIInicioSesion {
         }
 
     }
-    
+
     class CrearCuentaListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+            panel.remove(panel.getComponent(0));
+
+            JPanel panelAlta = new JPanel();
+            panelAlta.setLayout(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            panel.add(panelAlta);
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.weightx = 1;
+            gbc.weighty = 0;
+
+            JLabel label0, label1, label2, label3, label4, label5, label6, label7, label8;
+
+            label0 = new JLabel("Crear nuevo usuario");
+            gbc.insets = new Insets(40, 70, 20, 70);
+            panelAlta.add(label0, gbc);
+
+            label1 = new JLabel("Nombre: ");
+            gbc.gridy = 1;
+            gbc.insets = new Insets(0, 70, 2, 70);
+            panelAlta.add(label1, gbc);
+
+            nombreTF = new JTextField();
+            gbc.insets = new Insets(0, 70, 10, 70);
+            gbc.gridy = 2;
+            panelAlta.add(nombreTF, gbc);
+
+            label2 = new JLabel("Apodo:");
+            gbc.gridy = 3;
+            gbc.insets = new Insets(0, 70, 2, 70);
+            panelAlta.add(label2, gbc);
+
+            apodoTF = new JTextField();
+            gbc.gridy = 4;
+            gbc.insets = new Insets(0, 70, 10, 70);
+            panelAlta.add(apodoTF, gbc);
+
+            label5 = new JLabel("Sexo:");
+            gbc.gridy = 5;
+            gbc.insets = new Insets(0, 70, 2, 70);
+            panelAlta.add(label5, gbc);
+
+            masculinoRB = new JRadioButton("M");
+            femeninoRB = new JRadioButton("F");
+            ButtonGroup group = new ButtonGroup();
+            group.add(masculinoRB);
+            group.add(femeninoRB);
+            gbc.gridy = 6;
+            panelAlta.add(masculinoRB, gbc);
+            gbc.gridy = 7;
+            panelAlta.add(femeninoRB, gbc);
+
+            label8 = new JLabel("Fecha nacimiento:");
+            gbc.gridy = 8;
+            gbc.insets = new Insets(0, 70, 2, 70);
+            panelAlta.add(label8, gbc);
+
+            fechaNacimientoS = new JSpinner(new SpinnerDateModel());
+            gbc.gridy = 9;
+            gbc.insets = new Insets(0, 70, 10, 70);
+            panelAlta.add(fechaNacimientoS, gbc);
+
+            label6 = new JLabel("Altura(m):");
+            gbc.gridy = 10;
+            gbc.insets = new Insets(0, 70, 2, 70);
+            panelAlta.add(label6, gbc);
+
+            alturaTF = new JTextField();
+            gbc.gridy = 11;
+            gbc.insets = new Insets(0, 70, 10, 70);
+            panelAlta.add(alturaTF, gbc);
+
+            label7 = new JLabel("Peso(Kg):");
+            gbc.gridy = 12;
+            gbc.insets = new Insets(0, 70, 2, 70);
+            panelAlta.add(label7, gbc);
+
+            pesoTF = new JTextField();
+            gbc.gridy = 13;
+            gbc.insets = new Insets(0, 70, 10, 70);
+            panelAlta.add(pesoTF, gbc);
+
+            label3 = new JLabel("Email:");
+            gbc.gridy = 14;
+            gbc.insets = new Insets(0, 70, 2, 70);
+            panelAlta.add(label3, gbc);
+
+            emailTF = new JTextField();
+            gbc.gridy = 15;
+            gbc.insets = new Insets(0, 70, 10, 70);
+            panelAlta.add(emailTF, gbc);
+
+            label4 = new JLabel("Contraseña:");
+            gbc.gridy = 16;
+            gbc.insets = new Insets(0, 70, 2, 70);
+            panelAlta.add(label4, gbc);
+
+            contrasenaTF = new JTextField();
+            gbc.gridy = 17;
+            gbc.insets = new Insets(0, 70, 10, 70);
+            panelAlta.add(contrasenaTF, gbc);
+
+            JButton crearUsuarioB = new JButton("Crear cuenta");
+            gbc.gridy = 18;
+            gbc.insets = new Insets(20, 70, 40, 70);
+            crearUsuarioB.addActionListener(new AltaCuentaListener());
+            panelAlta.add(crearUsuarioB, gbc);
+
+            panel.revalidate();
+            panel.repaint();
         }
-        
+
+    }
+
+    class AltaCuentaListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String nombre, apodo, email, sexo, contrasena;
+            nombre = nombreTF.getText();
+            apodo = apodoTF.getText();
+            email = emailTF.getText();
+            contrasena = contrasenaTF.getText();
+            if (masculinoRB.isSelected()) {
+                sexo = "Masculino";
+            } else {
+                sexo = "Femenino";
+            }
+            System.out.println(sexo);
+            //Usuario usuario = new Usuario(nombre,sexo,apodo,contrasena,email);
+        }
+
     }
 
     class IniciaSesionListener implements ActionListener {
