@@ -20,6 +20,10 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -40,7 +44,7 @@ public class GUIActividades {
     private JPanel panel;
     private JTextField distanciaTF;
     private JSpinner actividadesS, fechaInicioS, fechaFinS;
-    
+
     public GUIActividades() {
         this.panel = new JPanel();
         this.panel.setBackground(new Color(37, 64, 113));
@@ -128,50 +132,75 @@ public class GUIActividades {
         gbc2 = new GridBagConstraints();
         gbc2.fill = GridBagConstraints.NONE;
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        
+
         /*
         ordenar actividades por fecha para sacar las ultimas 4
-        */
+         */
+        
         Actividad act;
-        for(int i = 0; i< actividades.size(); i++){
-            
+        ArrayList<Actividad> actMostradas = new ArrayList<Actividad>();
+        
+        HashMap<Actividad, Date> hmap = new HashMap<Actividad, Date>();
+        for(int i = 0; i < actividades.size();i++){
+            hmap.put(actividades.get(i), actividades.get(i).getFecha());
         }
         
-        for (int i = 0; i < 4; i++) {
-            if (i < actividades.size()) {
-                paneles[i] = new JPanel();
-                paneles[i].setLayout(new GridBagLayout());
-                paneles[i].setBorder(BorderFactory.createLineBorder(new Color(37, 64, 113), 10));
-                paneles[i].addMouseListener(new PanelActividadListener());
-                paneles[i].setName("panel" + i);
-
-                fechaActividad[i] = new JLabel(df.format(actividades.get(i).getFecha()));
-
-                tipoActividad[i] = new JLabel(actividades.get(i).getTipoActividad());
-                tiempoTotal[i] = new JLabel("Tiempo total: " + actividades.get(i).tiempoToString());
-                distancia[i] = new JLabel("Distancia total: " + String.valueOf(actividades.get(i).getDistanciaTotal()) + " Km");
-                calorias[i] = new JLabel("Calorias quemandas: " + actividades.get(i).getCalorias());
-                frecuencia[i] = new JLabel("Frec cardiaca prom: " + actividades.get(i).getFrecPromedio());
-
-                gbc2.gridy = 0;
-                gbc2.insets = new Insets(20, 30, 10, 30);
-                paneles[i].add(fechaActividad[i], gbc2);
-                gbc2.insets = new Insets(10, 30, 0, 30);
-                gbc2.gridy = 1;
-                paneles[i].add(tipoActividad[i], gbc2);
-                gbc2.gridy = 2;
-                paneles[i].add(tiempoTotal[i], gbc2);
-                gbc2.gridy = 3;
-                paneles[i].add(distancia[i], gbc2);
-                gbc2.gridy = 4;
-                paneles[i].add(calorias[i], gbc2);
-                gbc2.gridy = 5;
-                gbc2.insets = new Insets(10, 30, 20, 30);
-                paneles[i].add(frecuencia[i], gbc2);
-                panelActividades.add(paneles[i]);
-            }
+        Set set = hmap.entrySet();
+        Iterator iter = set.iterator();
+        while(iter.hasNext()){
+            Map.Entry elem = (Map.Entry)iter.next();
+            elem.getValue();
         }
+        
+        
+        /*
+        for (int j = 0, elim = 10; j < 4; j++) {
+            for (int i = 1; i < actTemp.size(); i++) {
+                if (actTemp.get(i).getFecha().getTime() < act.getFecha().getTime()) {
+                    act = actTemp.get(i);
+                    elim = i;
+                }
+            }
+            if (elim != 10) {
+                actTemp.remove(elim);
+            }
+            actMostradas.add(act);
+        }
+*//*
+        for (int i = 0; i < 4; i++) {
+            paneles[i] = new JPanel();
+            paneles[i].setLayout(new GridBagLayout());
+            paneles[i].setBorder(BorderFactory.createLineBorder(new Color(37, 64, 113), 10));
+            paneles[i].addMouseListener(new PanelActividadListener());
+            paneles[i].setName("panel" + i);
 
+            fechaActividad[i] = new JLabel(df.format(actMostradas.get(i).getFecha()));
+
+            tipoActividad[i] = new JLabel(actMostradas.get(i).getTipoActividad());
+            tiempoTotal[i] = new JLabel("Tiempo total: " + actMostradas.get(i).tiempoToString());
+            distancia[i] = new JLabel("Distancia total: " + String.valueOf(actMostradas.get(i).getDistanciaTotal()) + " Km");
+            calorias[i] = new JLabel("Calorias quemandas: " + actMostradas.get(i).getCalorias());
+            frecuencia[i] = new JLabel("Frec cardiaca prom: " + actMostradas.get(i).getFrecPromedio());
+
+            gbc2.gridy = 0;
+            gbc2.insets = new Insets(20, 30, 10, 30);
+            paneles[i].add(fechaActividad[i], gbc2);
+            gbc2.insets = new Insets(10, 30, 0, 30);
+            gbc2.gridy = 1;
+            paneles[i].add(tipoActividad[i], gbc2);
+            gbc2.gridy = 2;
+            paneles[i].add(tiempoTotal[i], gbc2);
+            gbc2.gridy = 3;
+            paneles[i].add(distancia[i], gbc2);
+            gbc2.gridy = 4;
+            paneles[i].add(calorias[i], gbc2);
+            gbc2.gridy = 5;
+            gbc2.insets = new Insets(10, 30, 20, 30);
+            paneles[i].add(frecuencia[i], gbc2);
+            panelActividades.add(paneles[i]);
+
+        }
+*/
     }
 
     class PanelActividadListener implements MouseListener {
@@ -259,18 +288,17 @@ public class GUIActividades {
             gbc.insets = new Insets(5, 5, 0, 5);
             gbc.gridx = 0;
             gbc.gridy = 0;
-            panelGraf.add(new JLabel("Velocidad vs Tiempo"),gbc);
+            panelGraf.add(new JLabel("Velocidad vs Tiempo"), gbc);
             gbc.gridy = 1;
             gbc.insets = new Insets(0, 5, 0, 5);
             JPanel graficaVelTiempo = new DrawGraph(actividad.getVelocidadesGrafica());
             graficaVelTiempo.setBorder(BorderFactory.createLineBorder(new Color(37, 64, 113), 10));
-            
+
             panelGraf.add(graficaVelTiempo, gbc);
-            
 
             gbc.gridy = 2;
             gbc.insets = new Insets(5, 5, 0, 5);
-            panelGraf.add(new JLabel("Frecuencia cardiaca vs Tiempo"),gbc);
+            panelGraf.add(new JLabel("Frecuencia cardiaca vs Tiempo"), gbc);
             gbc.gridy = 3;
             gbc.insets = new Insets(0, 5, 0, 5);
             JPanel graficaFrecTiempo = new DrawGraph(actividad.getFrecuencias());
@@ -279,7 +307,7 @@ public class GUIActividades {
 
             gbc.gridy = 4;
             gbc.insets = new Insets(5, 5, 0, 5);
-            panelGraf.add(new JLabel("Frecuencia cardiaca vs Tiempo"),gbc);
+            panelGraf.add(new JLabel("Frecuencia cardiaca vs Tiempo"), gbc);
             gbc.gridy = 5;
             gbc.insets = new Insets(0, 5, 0, 5);
             JPanel graficaFrecTiempo2 = new DrawGraph(actividad.getVelocidadesGrafica());
@@ -311,14 +339,14 @@ public class GUIActividades {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            String tipoActividad = (String)actividadesS.getValue();
-            Date fechaInicio = (Date)fechaInicioS.getValue();
-            Date fechaFin = (Date)fechaFinS.getValue();
+            String tipoActividad = (String) actividadesS.getValue();
+            Date fechaInicio = (Date) fechaInicioS.getValue();
+            Date fechaFin = (Date) fechaFinS.getValue();
             double distancia = Double.parseDouble(distanciaTF.getText());
             System.out.println(distancia);
         }
     }
-    
+
     public JPanel refresh() {
         return this.panel;
     }

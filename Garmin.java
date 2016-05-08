@@ -5,6 +5,8 @@
  */
 package garmin;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -24,12 +26,15 @@ public class Garmin {
         // TODO code application logic here
         Usuario usuario1 = new Usuario("Pablo", "Masculino", "Torto", "fufo", "pablotortoriello@gmail.com",
                 1.87, 67.5, "20/08/1991");
-        Date fecha = new Date();
+        
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date fecha =new Date();
         Actividad actividad = new Actividad("Correr", fecha);
-        Actividad actividad2 = new Actividad("Nadar", new Date(2015, 8, 15));
-        Actividad actividad3 = new Actividad("Bici", new Date(2015, 8, 15));
-        Actividad actividad4 = new Actividad("Nadar", new Date(2015, 8, 15));
-        Actividad actividad5 = new Actividad("Caminata", new Date(2015, 8, 15));
+        
+        Actividad actividad2 = new Actividad("Nadar", new Date());
+        Actividad actividad3 = new Actividad("Bici", new Date());
+        Actividad actividad4 = new Actividad("Nadar", new Date());
+        Actividad actividad5 = new Actividad("Caminata", new Date());
         
         actividad.agregarMedicion(new Medicion(0,0,124));
         actividad.agregarMedicion(new Medicion(1,360,128));
